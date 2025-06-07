@@ -275,12 +275,12 @@ class FishBoid():
     # Create the shape of the fish, rotating it to match the direction of the fishes movement
     def draw_shape(self):
         # Length of the fish
-        length = 4
+        length = 3
         # Direction of movement
         direction = np.arctan2(self.Vy, self.Vx)
 
         # Create basic kite
-        kite = np.array([[length,length],
+        kite = [[length,length],
                 [0, length*2.5],
                 [-length, length],
                 [-length,length*0.2],
@@ -290,7 +290,7 @@ class FishBoid():
                 [length*1.2,-length*2.5],
                 [length*0.3,-length],
                 [length,length*0.2]
-                ])
+                ]
 
 
 

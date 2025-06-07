@@ -81,9 +81,9 @@ def simulate(sim_name, window, cell_size, fish_count, foodpoint_locations, evo_a
         for foodpoint in foodpoints:
             foodpoint.detectFish()
             if foodpoint.active:
-                colour = (0, 255, 0)
+                colour = (0, 140, 0)
             else:
-                colour = (255, 0, 0)
+                colour = (140, 0, 0)
             length = cell_size * foodpoint.size * 4
             top_left_x = foodpoint.x - length / 2
             top_left_y = foodpoint.y - length / 2
@@ -112,7 +112,8 @@ def simulate(sim_name, window, cell_size, fish_count, foodpoint_locations, evo_a
                 Fish_eaten += 1
                 generation = ((Time - Eaten_fish.age) // 2700)
                 y.append((generation, Eaten_fish.age // 60))
-        pygame.draw.polygon(screen, (0, 0, 0), predator.draw_shape())
+        pygame.draw.polygon(screen, (108, 119, 128), predator.draw_shape())
+        pygame.draw.polygon(screen, (0, 0, 0), predator.draw_shape(),width=1)
 
         # Visually show stats about the state of the simulation
         ft_font = freetype.Font(None, 25)
