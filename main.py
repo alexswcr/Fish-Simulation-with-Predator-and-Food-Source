@@ -112,7 +112,8 @@ def simulate(sim_name, window, cell_size, fish_count, foodpoint_locations, evo_a
                 Fish_eaten += 1
                 generation = ((Time - Eaten_fish.age) // 2700)
                 y.append((generation, Eaten_fish.age // 60))
-        pygame.draw.polygon(screen, (0, 0, 0), predator.draw_shape())
+        pygame.draw.polygon(screen, (108, 119, 128), predator.draw_shape())
+        pygame.draw.polygon(screen, (0, 0, 0), predator.draw_shape(),width=1)
 
         # Visually show stats about the state of the simulation
         ft_font = freetype.Font(None, 25)

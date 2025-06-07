@@ -280,7 +280,7 @@ class FishBoid():
         direction = np.arctan2(self.Vy, self.Vx)
 
         # Create basic kite
-        kite = np.array([[length,length],
+        kite = [[length,length],
                 [0, length*2.5],
                 [-length, length],
                 [-length,length*0.2],
@@ -290,7 +290,7 @@ class FishBoid():
                 [length*1.2,-length*2.5],
                 [length*0.3,-length],
                 [length,length*0.2]
-                ])
+                ]
 
 
 
