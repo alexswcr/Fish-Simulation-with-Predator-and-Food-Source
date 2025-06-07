@@ -275,7 +275,7 @@ class FishBoid():
     # Create the shape of the fish, rotating it to match the direction of the fishes movement
     def draw_shape(self):
         # Length of the fish
-        length = 4
+        length = 3
         # Direction of movement
         direction = np.arctan2(self.Vy, self.Vx)
 

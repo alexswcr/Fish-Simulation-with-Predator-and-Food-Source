@@ -81,9 +81,9 @@ def simulate(sim_name, window, cell_size, fish_count, foodpoint_locations, evo_a
         for foodpoint in foodpoints:
             foodpoint.detectFish()
             if foodpoint.active:
-                colour = (0, 255, 0)
+                colour = (0, 140, 0)
             else:
-                colour = (255, 0, 0)
+                colour = (140, 0, 0)
             length = cell_size * foodpoint.size * 4
             top_left_x = foodpoint.x - length / 2
             top_left_y = foodpoint.y - length / 2
