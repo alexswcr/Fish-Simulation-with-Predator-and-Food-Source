@@ -16,8 +16,8 @@ class Grid:
     # Returns the cell position of a particular x,y point
     def cell_coords(self,x,y):
 
-        column = int(np.round(x/self.cell_size))
-        row = int(np.round(y/self.cell_size))
+        column = int(x/self.cell_size)
+        row = int(y/self.cell_size)
         column = np.clip(column,0,self.columns-1)
         row = np.clip(row,0,self.rows-1)
         return row,column

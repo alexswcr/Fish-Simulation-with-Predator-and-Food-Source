@@ -284,9 +284,9 @@ if __name__ == '__main__':
     evol_option.grid(column=1,row=4,sticky=tk.W)
 
     # Option menu for including stochasticity
-    ttk.Label(bottom_frame, text="Use Social Learning?: ").grid(column=0, row=5, sticky=tk.W)
+    ttk.Label(bottom_frame, text="Use Stochasticity? (causes janky movement): ").grid(column=0, row=5, sticky=tk.W)
     stoch_val = tk.StringVar()
-    stoch_val.set("Yes")
+    stoch_val.set("No")
     stoch_option = tk.OptionMenu(bottom_frame, stoch_val, "Yes", "No")
     stoch_option.grid(column=1, row=5, sticky=tk.W)
 
