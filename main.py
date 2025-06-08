@@ -34,12 +34,12 @@ def simulate(sim_name, window, cell_size, fish_count, foodpoint_locations, evo_a
 
     # Creates a list of fish with random colours
     fishes = [FishBoid(window, randomColour(), grid, foodpoints, evo_and_learn, stochastic,reproduce_time) for i in range(fish_count)]
-
+    predators = [PredatorBoid(window, grid) for i in range(2)]
     # Give grid object the fish list reference, allowing it to remove fish from grid that are dead
     grid.giveFishList(fishes)
 
     # Create the predator
-    predator = PredatorBoid(window, grid)
+    #predator = PredatorBoid(window, grid)
 
     clock = pygame.time.Clock()
 
@@ -105,16 +105,17 @@ def simulate(sim_name, window, cell_size, fish_count, foodpoint_locations, evo_a
             #pygame.draw.polygon(screen,np.array((255,255,255)) - np.round(fish.Hunger/fish.maxHunger * np.array(fish.colour)), fish.draw_shape())
             pygame.draw.polygon(screen, fish.colour, fish.draw_shape())
         # Update the predator, returns the fish it has eaten, or none if it did not eat in that frame
-        Eaten_fish = predator.update()
-        if isinstance(Eaten_fish, FishBoid):
-            if any(fish == Eaten_fish for fish in fishes):
-                fishes.remove(Eaten_fish)
-                print("Fish Eaten")
-                Fish_eaten += 1
-                generation = ((Time - Eaten_fish.age) // 2700)
-                y.append((generation, Eaten_fish.age // 60))
-        pygame.draw.polygon(screen, (108, 119, 128), predator.draw_shape())
-        pygame.draw.polygon(screen, (0, 0, 0), predator.draw_shape(),width=1)
+        for predator in predators:
+            Eaten_fish = predator.update()
+            if isinstance(Eaten_fish, FishBoid):
+                if any(fish == Eaten_fish for fish in fishes):
+                    fishes.remove(Eaten_fish)
+                    print("Fish Eaten")
+                    Fish_eaten += 1
+                    generation = ((Time - Eaten_fish.age) // 2700)
+                    y.append((generation, Eaten_fish.age // 60))
+            pygame.draw.polygon(screen, (108, 119, 128), predator.draw_shape())
+            pygame.draw.polygon(screen, (0, 0, 0), predator.draw_shape(),width=1)
 
         # Visually show stats about the state of the simulation
         ft_font = freetype.Font(None, 25)
@@ -315,14 +316,14 @@ if __name__ == '__main__':
     sim_value_label.grid(column=2,row=6,sticky=tk.W)
 
     food_num_var = tk.IntVar()
-    food_num_var.set(50)
+    food_num_var.set(40)
     food_num_var.trace_add("write",food_change_val)
 
     ttk.Label(bottom_frame, text="Amount of food in food point: ").grid(column=0, row=6, sticky=tk.W)
 
     food_num_slider = ttk.Scale(bottom_frame,from_=5,to=100,variable=food_num_var)
     food_num_slider.grid(column=1,row=6,sticky=tk.W)
-    food_num_label = ttk.Label(bottom_frame,text="Value: 50")
+    food_num_label = ttk.Label(bottom_frame,text="Value: 40")
     food_num_label.grid(column=2,row=6,sticky=tk.W)
 
     reproduce_num_var = tk.IntVar()

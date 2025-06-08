@@ -113,7 +113,7 @@ class FishBoid():
         if isinstance(partner, FishBoid) and partner is not self:
             baby_x = (self.x + partner.x) / 2
             baby_y = (self.y + partner.y) / 2
-            baby_colour = np.clip(np.uint8(np.mean((self.colour, partner.colour), 0)) + np.random.randint(-20, 20, 3),
+            baby_colour = np.clip(np.uint8(np.mean((self.colour, partner.colour), 0)) + np.random.randint(-30, 30, 3),
                                   0, 255)
             baby_fish = FishBoid((self.window[1], self.window[0]), baby_colour, self.grid, self.foodpoints,
                                  self.evo_and_learn, self.stochastic,self.reproduceTime)

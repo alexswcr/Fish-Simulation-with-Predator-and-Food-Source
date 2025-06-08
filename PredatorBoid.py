@@ -8,7 +8,7 @@ class PredatorBoid():
         self.window = (window[1], window[0])
         self.grid = grid
 
-        self.x, self.y = 100, 100
+        self.x, self.y = np.random.uniform(0.1, 0.9) * window[1], np.random.uniform(0, 0.9) * window[0]
         self.Vx = 1.6
         self.Vy = 1.6
 
@@ -25,11 +25,11 @@ class PredatorBoid():
         value = float(1000)
         min_distance = float(1000)
         for fish in all_visible_fish:
-            if fish is not self:
+            if not isinstance(fish,PredatorBoid):
 
                 distance = math.dist((self.x, self.y), (fish.x, fish.y))
                 colour_dist = 255 - math.dist((153, 238, 255),fish.colour)
-                cur_val = distance + 0.4*colour_dist
+                cur_val = distance + np.random.normal(0.5,0.2)*colour_dist
                 if cur_val < value:
                     value = cur_val
                     min_distance = distance
@@ -65,7 +65,7 @@ class PredatorBoid():
 
     # Normalise and limit the speed of the predator
     def speed_limit(self):
-        v_max = 1.92
+        v_max = 1.94
         v_min = 1.2
         vel_norm = np.sqrt(self.Vx ** 2 + self.Vy ** 2)
         if vel_norm > v_max:
