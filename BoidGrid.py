@@ -23,33 +23,34 @@ class Grid:
         return row,column
 
     #Remove the fish from its current grid cell
-    def removeFish(self,fish):
-
-        row, column = self.cell_coords(fish.x, fish.y)
-        for i in range(-3, 4):
-            for j in range(-3, 4):
-                r = row + i
-                c = column + j
-                if 0 < r < self.rows and 0 < c < self.columns and fish in self.grid[r][c]:
-                    self.grid[r][c].remove(fish)
-                else:
-                    pass
-        row, column = self.cell_coords(fish.x, fish.y)
-        old_pos = self.grid[row][column]
-        if fish in old_pos:
-            old_pos.remove(fish)
+    def removeFish(self,fish,x=None,y=None):
+        if x is None or y is None:
+            x, y = fish.x, fish.y
+        row, col = self.cell_coords(x, y)
+        if fish in self.grid[row][col]:
+            self.grid[row][col].remove(fish)
 
     #This function removes all occurences of a fish in the grid
     def wipeFish(self,fish):
+        counter = 0
+        pos_list = []
         for row in range(self.rows):
             for col in range(self.columns):
                 if fish in self.grid[row][col]:
                     self.grid[row][col].remove(fish)
+                    counter += 1
+                    pos_list.append([row,col])
+
 
     #Adds fish to its current cell
     def addFish(self,fish):
         row,column = self.cell_coords(fish.x,fish.y)
         self.grid[row][column].append(fish)
+
+    def updateFish(self,fish,x,y):
+        self.addFish(fish)
+        self.removeFish(fish,x,y)
+
 
     #Gets fish in nearby cells
     def get_neighbour(self,fish,vision_range):

@@ -22,7 +22,7 @@ def randomColour():
 
 
 # Creates the pygame simulation window, can customise the window size, cell size, number of boids and locations of food
-def simulate(sim_name, window, cell_size, fish_count, foodpoint_locations, evo_and_learn, stochastic):
+def simulate(sim_name, window, cell_size, fish_count, foodpoint_locations, evo_and_learn, stochastic,food_quantity,reproduce_time):
     pygame.init()
     pygame.display.set_caption(str(sim_name))
     screen = pygame.display.set_mode(window)
@@ -30,10 +30,10 @@ def simulate(sim_name, window, cell_size, fish_count, foodpoint_locations, evo_a
 
     # Food points are created at the points specified above, the amount of food and size of the food point can be changed
     # In this case the foodpoint can feed 30 fish before disabling and have size 2x2 (cells)
-    foodpoints = [FoodPoint(foodpoint[1], foodpoint[0], grid, 40, 2) for foodpoint in foodpoint_locations]
+    foodpoints = [FoodPoint(foodpoint[1], foodpoint[0], grid, food_quantity, 2) for foodpoint in foodpoint_locations]
 
     # Creates a list of fish with random colours
-    fishes = [FishBoid(window, randomColour(), grid, foodpoints, evo_and_learn, stochastic) for i in range(fish_count)]
+    fishes = [FishBoid(window, randomColour(), grid, foodpoints, evo_and_learn, stochastic,reproduce_time) for i in range(fish_count)]
 
     # Give grid object the fish list reference, allowing it to remove fish from grid that are dead
     grid.giveFishList(fishes)
@@ -101,8 +101,9 @@ def simulate(sim_name, window, cell_size, fish_count, foodpoint_locations, evo_a
                 Fish_starved += 1
                 generation = ((Time - fish.age // 60) // 2700)
                 y.append((generation, fish.age // 60))
+            # If a fish is close to starving, it will get paler and paler.
+            #pygame.draw.polygon(screen,np.array((255,255,255)) - np.round(fish.Hunger/fish.maxHunger * np.array(fish.colour)), fish.draw_shape())
             pygame.draw.polygon(screen, fish.colour, fish.draw_shape())
-
         # Update the predator, returns the fish it has eaten, or none if it did not eat in that frame
         Eaten_fish = predator.update()
         if isinstance(Eaten_fish, FishBoid):
@@ -191,11 +192,23 @@ def sim_change_val(*args):
     num = int(sim_num_var.get())
     sim_value_label['text'] = "Value: " + str(num)
 
+def food_change_val(*args):
+    num = int(food_num_var.get())
+    food_num_label['text'] = "Value: " + str(num)
+
+def reproduce_change_val(*args):
+    num = int(reproduce_num_var.get())
+    reproduce_num_label['text'] = "Value: " + str(num)
+
 def start_sim(*args):
 
     number_of_boids = int(num_boids_var.get())
 
     cell_size = int(cell_var.get())
+
+    food_amount = int(food_num_var.get())
+
+    reproduce_time = int(reproduce_num_var.get())
 
     screen_width = int(screen_width_entry.get()) if screen_width_entry.get().isnumeric() else 1260
     screen_height = int(screen_height_entry.get()) if screen_height_entry.get().isnumeric() else 700
@@ -214,7 +227,7 @@ def start_sim(*args):
     for i in range(num_simulations):
         Process(target=simulate,
                 args=[str("Simulation_" + str(i)), screen_size, cell_size, number_of_boids, foodpoint_locations, evolve_and_learn,
-                      stochasticity]).start()
+                      stochasticity,food_amount,reproduce_time]).start()
 
 if __name__ == '__main__':
     # Change the following values to affect the simulation, the variable names indicate their function
@@ -300,6 +313,28 @@ if __name__ == '__main__':
     sim_num_slider.grid(column=1,row=6,sticky=tk.W)
     sim_value_label = ttk.Label(bottom_frame,text="Value: 1")
     sim_value_label.grid(column=2,row=6,sticky=tk.W)
+
+    food_num_var = tk.IntVar()
+    food_num_var.set(50)
+    food_num_var.trace_add("write",food_change_val)
+
+    ttk.Label(bottom_frame, text="Amount of food in food point: ").grid(column=0, row=6, sticky=tk.W)
+
+    food_num_slider = ttk.Scale(bottom_frame,from_=5,to=100,variable=food_num_var)
+    food_num_slider.grid(column=1,row=6,sticky=tk.W)
+    food_num_label = ttk.Label(bottom_frame,text="Value: 50")
+    food_num_label.grid(column=2,row=6,sticky=tk.W)
+
+    reproduce_num_var = tk.IntVar()
+    reproduce_num_var.set(2250)
+    reproduce_num_var.trace_add("write", reproduce_change_val)
+
+    ttk.Label(bottom_frame, text="Reproduction cooldown (ticks): ").grid(column=0, row=7, sticky=tk.W)
+
+    reproduce_num_slider = ttk.Scale(bottom_frame, from_=800, to=4000, variable=reproduce_num_var)
+    reproduce_num_slider.grid(column=1, row=7, sticky=tk.W)
+    reproduce_num_label = ttk.Label(bottom_frame, text="Value: 2250")
+    reproduce_num_label.grid(column=2, row=7, sticky=tk.W)
 
     ttk.Button(button_frame,text="Start Simulation",command=start_sim).grid()
 

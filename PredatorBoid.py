@@ -14,7 +14,7 @@ class PredatorBoid():
 
         self.isElder = False  # When a fish checks for elders, the neighbour list may contain a predator
 
-        self.size = 15
+        self.size = 20
         self.target = None  # Fish it wants to catch
         self.grid.addFish(self)
 
@@ -22,16 +22,20 @@ class PredatorBoid():
     def get_closest_fish(self):
         all_visible_fish = self.grid.get_neighbour(self, vision_range=12)
         closest_fish = None
-        min_distance = float(10000)
+        value = float(1000)
+        min_distance = float(1000)
         for fish in all_visible_fish:
             if fish is not self:
 
                 distance = math.dist((self.x, self.y), (fish.x, fish.y))
-                if distance < min_distance:
+                colour_dist = 255 - math.dist((153, 238, 255),fish.colour)
+                cur_val = distance + 0.4*colour_dist
+                if cur_val < value:
+                    value = cur_val
                     min_distance = distance
                     closest_fish = fish
+        return closest_fish,min_distance
 
-        return closest_fish, min_distance
 
     # Chase the closest fish and eat it if predator is close enough
     def chase_target(self):
@@ -61,7 +65,7 @@ class PredatorBoid():
 
     # Normalise and limit the speed of the predator
     def speed_limit(self):
-        v_max = 1.82
+        v_max = 1.92
         v_min = 1.2
         vel_norm = np.sqrt(self.Vx ** 2 + self.Vy ** 2)
         if vel_norm > v_max:
@@ -100,7 +104,7 @@ class PredatorBoid():
     # Draw arrow of the predator
     def draw_shape(self):
         length = self.size
-        kite = np.array([[-length * 0.8, length * 0.8],
+        kite = [[-length * 0.8, length * 0.8],
                          [-length * 0.75, length],
                          [0, length * 1.15],
                          [length * 0.75, length],
@@ -127,7 +131,7 @@ class PredatorBoid():
                          [-length * 0.35, length * 0.5],
                          [-length * 0.3, length * 0.75],
 
-                         ])
+                         ]
         direction = np.arctan2(self.Vy, self.Vx)
         # Rotation matrix
         r_matrix = np.array([[np.cos(direction), -np.sin(direction)], [np.sin(direction), np.cos(direction)]])
